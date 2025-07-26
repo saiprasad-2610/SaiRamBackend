@@ -52,7 +52,6 @@ public class UserController {
 
     // User login endpoint (handled by Spring Security Basic Auth, but this endpoint can return user details)
     @PostMapping("/login")
-    @PreAuthorize("isAuthenticated()") // This ensures only authenticated requests reach here
     public ResponseEntity<User> loginUser(Authentication authentication) {
         Optional<User> userOptional = userService.findByUsername(authentication.getName());
         return userOptional
@@ -63,7 +62,6 @@ public class UserController {
 
     // Get current authenticated user's details
     @GetMapping("/me")
-    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<User> getCurrentUser(Authentication authentication) {
         Optional<User> userOptional = userService.findByUsername(authentication.getName());
         return userOptional
@@ -74,7 +72,6 @@ public class UserController {
 
     // NEW: Update current authenticated user's profile
     @PutMapping("/me")
-    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<User> updateCurrentUserProfile(@RequestBody UserUpdateDTO userUpdateDTO, Authentication authentication) {
         String username = authentication.getName();
         Optional<User> userOptional = userService.findByUsername(username);
@@ -99,7 +96,6 @@ public class UserController {
 
     // NEW: Change current authenticated user's password
     @PostMapping("/change-password")
-    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<String> changeCurrentUserPassword(@RequestBody PasswordChangeDTO passwordChangeDTO, Authentication authentication) {
         String username = authentication.getName();
         Optional<User> userOptional = userService.findByUsername(username);
